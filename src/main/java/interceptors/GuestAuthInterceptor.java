@@ -1,9 +1,12 @@
 package interceptors;
 
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.struts2.dispatcher.HttpParameters;
+import org.apache.struts2.dispatcher.Parameter;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -15,8 +18,11 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
         @Override
         public String intercept(ActionInvocation invocation) throws Exception {
         		System.out.println("Guest Auth called");
+        		final ActionContext context = invocation.getInvocationContext();
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                HttpParameters params = invocation.getInvocationContext().getParameters();
+                Map<String, Parameter> params = (Map<String, Parameter>)context.get(ActionContext.PARAMETERS);
+                Map<String, Object> parametersCopy = new HashMap<String, Object>();
+                parametersCopy.putAll(params);
                 String pageOwnerCode = "";
                 try(Connection conn = DBConnection.getConnection()) {
                 	String userCode = (String)sessionMap.get("userCode");
@@ -69,6 +75,7 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
 						sessionMap.put("owner", true);
 						sessionMap.put("visitor", false);
 					}
+					context.put(ActionContext.PARAMETERS, parametersCopy);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
