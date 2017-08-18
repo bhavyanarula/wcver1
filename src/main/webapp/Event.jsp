@@ -91,7 +91,7 @@
 		if(mode=="create")
 		{
 			alert("You are now opening the event to public and volunteers, \nPlease enter some work related points for the willing volunteers' reference!");
-			var strNewWork = "<s:property value='%{eventBean.workReq.replaceAll(\"\n\", \"<br>\")}' escape='false' />";
+			var strNewWork = "<s:property value='%{eventBean.workReq.replaceAll(\"\n\", \"<br>\")}' escapeHtml='false' />";
 			document.getElementById("newWork").value = strNewWork.replace('<br>', '\n');
 		}
 		$('#'+divId).on('shown.bs.modal', function () {
@@ -220,7 +220,7 @@
 				<div class="col-md-8 col-sm-8">
 					<div class="panel panel-default col-md-12" style="height:391px;">
 						<div class="panel-body scrollDetails" >
-				        	<p style="text-align : justify;"><s:property escape='false' value='%{eventBean.details.replaceAll(\"\r\n\", \"<br>\")}' /></p>
+				        	<p style="text-align : justify;"><s:property escapeHtml='false' value='%{eventBean.details.replaceAll(\"\r\n\", \"<br>\")}' /></p>
 				       	</div>
 				    </div>
 				</div>
@@ -387,7 +387,7 @@
 						        		<button class="btn btn-default" style="margin-right:3px;" onclick='openPopup("newWorkDiv", "edit")'>Edit</button>
 						        	</s:if>
 					        	</div>
-										<p id="workDiv"><s:property escape='false' value='%{eventBean.workReq.replaceAll(\"\n\", \"<br>\")}' /></p>
+							<p id="workDiv"><s:property escapeHtml='false' value='%{eventBean.workReq.replaceAll(\"\n\", \"<br>\")}' /></p>
 						</div>
 					        </s:if>
 	        		

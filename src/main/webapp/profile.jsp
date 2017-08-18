@@ -173,7 +173,7 @@
 		    </s:if>
 	     </s:else>
 	     <script>
-		     var desc = "<s:property escape='false' value='%{#session.pageOwnerBean.ngoDescription.replaceAll(\"\r\n\", \"<br>\")}'  />";
+		     var desc = "<s:property escapeHtml='false' value='%{#session.pageOwnerBean.ngoDescription.replaceAll(\"\r\n\", \"<br>\")}'  />";
 		     if(desc!="null" && desc!=null){
 			 $('#ngoDescription').html("<hr style=\'margin:5px 0px 10px 0px;\'> "+desc	);
 		     }

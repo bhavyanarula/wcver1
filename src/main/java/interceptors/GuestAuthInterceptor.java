@@ -3,6 +3,7 @@ package interceptors;
 import java.sql.Connection;
 import java.util.Map;
 
+import org.apache.struts2.dispatcher.HttpParameters;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -15,7 +16,7 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
         public String intercept(ActionInvocation invocation) throws Exception {
         		System.out.println("Guest Auth called");
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                Map<String, Object> params = invocation.getInvocationContext().getParameters();
+                HttpParameters params = invocation.getInvocationContext().getParameters();
                 String pageOwnerCode = "";
                 try(Connection conn = DBConnection.getConnection()) {
                 	String userCode = (String)sessionMap.get("userCode");
@@ -28,7 +29,7 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
                 	}
                 	else
                 	{
-                		pageOwnerCode = ((String[])params.get("pageOwnerCode"))[0];
+                		pageOwnerCode = params.get("pageOwnerCode").getValue();
                 		if(!sessionMap.containsKey("pageOwnerBean") 
                 				|| !((NgoBean)sessionMap.get("pageOwnerBean")).getUid().equalsIgnoreCase(pageOwnerCode)
                 				|| Boolean.parseBoolean(""+sessionMap.get("isUserModified")))

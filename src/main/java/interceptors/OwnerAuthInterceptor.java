@@ -3,6 +3,8 @@ package interceptors;
 import java.sql.Connection;
 import java.util.Map;
 
+import org.apache.struts2.dispatcher.HttpParameters;
+import org.apache.struts2.dispatcher.Parameter.Request;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -15,7 +17,7 @@ public class OwnerAuthInterceptor  extends AbstractInterceptor {
         public String intercept(ActionInvocation invocation) throws Exception {
         		System.out.println("Owner Auth called");
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                Map<String, Object> params = invocation.getInvocationContext().getParameters();
+                HttpParameters params = invocation.getInvocationContext().getParameters();
                 String role = "";
                 String result = "";
                 if(!sessionMap.isEmpty()){
@@ -32,7 +34,7 @@ public class OwnerAuthInterceptor  extends AbstractInterceptor {
                     			sessionMap.put("pageOwnerBean", sessionBean);
                     			sessionMap.put("isUserModified", false);
                     		}
-							params.put("pageOwnerCode", userCode);
+							params.put("pageOwnerCode", new Request("pageOwnerCode", userCode));
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
