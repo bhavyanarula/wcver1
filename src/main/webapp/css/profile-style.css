@@ -1,0 +1,130 @@
+@charset "utf-8";
+
+
+#buttons {
+	font-weight: bold;
+	padding: 1px;
+	float: left;
+	height: 50px;
+	width: 100%;
+}
+.button {
+	font-weight: bolder;
+	color: #003366;
+	text-align: center;
+	position: relative;
+}
+.iButton{
+	display:none;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background-color: gray;
+	width:100%;
+	height:100%;
+}
+#image
+{
+	height:305px;
+	width:100%;
+	float:left;
+	z-index: 45;
+	clear:none;
+}
+#mcHeader {
+	float: left;
+	height: auto;
+	width: 100%;
+	position:relative;
+}
+#nameDiv
+{
+	z-index: 50;
+	position:absolute;
+	bottom:10px;
+	width:inherit;
+	
+}
+#nameP
+{
+	text-align:center;
+	font-size:48px;
+	color:white;
+	text-shadow: 2px 2px black;
+	background-color: #D0E6E8;
+	opacity:0.85;
+}
+#detailsLeft
+{
+	height:304px;
+	width:49%;	
+	float:left;
+}
+#detailsRight
+{
+	height:304px;
+	width:49%;	
+	float:left;	
+}
+#mainContent
+{
+	position:relative;
+}
+.list-box
+{
+	width:150px;
+	height:200px;
+	border:1px #c0c0c0 solid;
+}
+.list-box ul
+{
+	list-style:none;
+	-webkit-padding-start:0px;
+}
+.list-box li
+{
+	float:left;
+	display:inline;
+	width:48px;
+	height:48px;
+	padding:1px;
+	list-style:none;
+	font-size: 8px;
+	margin:0px;
+}
+
+.slideshow
+{
+	float:left;
+	width:100%;
+	height:590px;
+}
+
+
+.mid
+{
+	width:100%;
+	margin-top:10px;
+}
+.mid-2
+{
+	width:100%;
+	margin:10px;
+}
+.description
+{
+	width:49%;
+	overflow:scroll;
+	height: 300px;
+	text-align: justify;
+	float:left;
+}
+
+.eventList
+{
+	width:49%;
+	overflow:scroll;
+	height: 300px;
+	text-align: justify;
+	float:left;
+}

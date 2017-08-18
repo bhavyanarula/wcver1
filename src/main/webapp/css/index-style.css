@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+
+
+#laR1 {
+	float: left;
+}
+#intro
+{
+	float:left;
+	height: auto;
+	width:auto;
+}
+
+@font-face {
+    font-family: Freight;
+    src: url(../fonts/FreightSans Black.ttf);
+}
+
+.errorDiv {
+	line-height: normal;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #FF0000;
+	background-color: #FFECEC;
+	float: left;
+	height: auto;
+	width: auto;
+	border: thin dotted #FF0000;
+}

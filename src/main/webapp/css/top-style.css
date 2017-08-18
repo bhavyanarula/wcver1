@@ -1,0 +1,59 @@
+@charset "utf-8";
+/* CSS Document */
+
+body  {
+	font: 'Myriad Pro, Calibri, Verdana';
+	margin: 0; /* it's good practice to zero the margin and padding of the body element to account for differing browser defaults */
+	padding: 0;
+	color: #000000;
+	background-color: #FFFFFF;
+	
+}
+
+
+.clearfix:after { 
+   content: "."; 
+   visibility: hidden; 
+   display: block; 
+   height: 0; 
+   clear: both;
+}
+
+#header {
+	background-color: #D0E6E8;
+	float: left;
+	height: 120px;
+	width: 100%;
+	color:#214043;
+}
+#logo {
+	
+	float: left;
+	height: 70px;
+	width: 350px;
+}
+#logoImage {
+	float: left;
+	height: 65px;
+	width: 113px;
+}
+
+#searchBar {
+	float: right;
+	height: 70px;
+	width: auto;
+	font-size: 12px;
+}
+div
+{
+/*border:1px solid blue;*/
+
+padding:1px;
+border-radius:2%;
+}
+#sbR1 {
+	float: left;
+	height: 27%;
+	width: 100%;
+	text-align:right;
+}

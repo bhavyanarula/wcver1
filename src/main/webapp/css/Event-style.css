@@ -1,0 +1,78 @@
+@CHARSET "ISO-8859-1";
+
+#image
+{
+	height:305px;
+	width:100%;
+	z-index: 45;
+	clear:none;
+}
+.mcHeader {
+	float: left;
+	width: 100%;
+	position:relative;
+	
+}
+#nameDiv
+{
+	z-index: 50;
+	position:absolute;
+	top:2px;
+	left:0px;
+	width:100%;
+}
+#nameP
+{
+	text-align:center;
+	font-size:30px;
+	color:white;
+	text-shadow: 2px 2px black;
+	background-color: #CECECE;
+	opacity:0.85;
+}
+.mainContent
+{
+	margin-top:15px;
+}
+#orgByDiv
+{
+	z-index: 50;
+	position:absolute;
+	bottom:0px;
+	width:inherit;
+	float:right;
+	padding:0 5px 0 5px;
+	color:white;
+	text-shadow: black;
+	right:15px;
+}
+#orgByP
+{
+	font-style:italic;
+	text-align:right;
+	color:gray;
+	text-shadow: gray;
+}
+.menu {
+	font-weight: bold;
+	padding: 1px;
+	float: left;
+	height: 50px;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom:10px;
+
+}
+
+
+.button:hover {
+	color:white;
+	background: #008080;
+}
+.button:hover i{
+	color:white;
+	background: #008080;
+}
+#workDiv {
+	text-align : justify;
+}

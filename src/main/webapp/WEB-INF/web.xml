@@ -1,11 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://java.sun.com/xml/ns/javaee" 
+   xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+   http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+   id="WebApp_ID" version="3.0" metadata-complete="true" >
+   
 
-<web-app version="3.0"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         metadata-complete="false">
+   <display-name>Struts 2</display-name>
+   <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+   </welcome-file-list>
+   <filter>
+	<filter-name>struts2</filter-name>
+	<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
 
-         
+  </filter>
+   <filter-mapping>
+      <filter-name>struts2</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+
+   <jsp-config>
+  <!-- Struts Tag Library Descriptors -->
+  <taglib>
+    <taglib-uri>http://struts.apache.org/tags-bean</taglib-uri>
+    <taglib-location>/WEB-INF/struts-bean.tld</taglib-location>
+  </taglib>
+  
+  <taglib>
+    <taglib-uri>http://struts.apache.org/tags-logic</taglib-uri>
+    <taglib-location>/WEB-INF/struts-logic.tld</taglib-location>
+  </taglib>
+  </jsp-config>
+  <session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+	
+	<servlet>
+		<servlet-name>uploads</servlet-name>
+		<servlet-class>servlet.Uploads</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploads</servlet-name>
+		<url-pattern>/uploads/*</url-pattern>
+		<url-pattern>/event/uploads/*</url-pattern>
+	</servlet-mapping>
+	
+	<!-- <servlet>
+		<servlet-name>certificate</servlet-name>
+		<servlet-class>servlet.certificate</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>certificate</servlet-name>
+		<url-pattern>/.well-known/*</url-pattern>
+	</servlet-mapping> -->
+	
+	
+	<security-constraint>
+	  <web-resource-collection>
+		<url-pattern>/*</url-pattern>
+	  </web-resource-collection>
+	  <user-data-constraint>
+		<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+	  </user-data-constraint>
+	 </security-constraint>
+	
 </web-app>
-

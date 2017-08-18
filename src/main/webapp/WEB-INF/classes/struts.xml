@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD  
+ Struts Configuration 2.1//EN"   
+"http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+
+	<constant name="struts.devMode" value="false" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.mapper.alwaysSelectFullNamespace"
+		value="false" />
+	<constant name="struts.enable.SlashesInActionNames" value="true" />
+	<constant name="struts.patternMatcher" value="namedVariable"/>
+	<constant name="struts.multipart.maxSize" value="20971520" />
+    <constant name="params.excludeParams" value="dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,parameters\...*,submit" />
+	<constant name="struts.action.excludePattern" value="/uploads/*"/>
+	<constant name="struts.action.excludePattern" value="/.well-known/*"/>
+	<package name="abc" extends="struts-default">
+		<interceptors>
+		
+			<interceptor name="guestAuthentication" class="interceptors.GuestAuthInterceptor"></interceptor>
+			<interceptor-stack name="guestAuthStack">
+				<interceptor-ref name="guestAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack">
+				        <param name="excludeParams">^dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,^parameters\..*,^action:.*,^method:.*</param>
+				</interceptor-ref>
+			</interceptor-stack>
+			<interceptor name="ownerAuthentication" class="interceptors.OwnerAuthInterceptor"></interceptor>
+			<interceptor-stack name="ownerAuthStack">
+				<interceptor-ref name="ownerAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack">
+					<param name="excludeParams">^dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,^parameters\..*,^action:.*,^method:.*</param>
+				</interceptor-ref>
+			</interceptor-stack>
+			<interceptor name="visitorAuthentication" class="interceptors.VisitorAuthInterceptor"></interceptor>
+			<interceptor-stack name="visitorAuthStack">
+				<interceptor-ref name="visitorAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack">
+					<param name="excludeParams">^dojo\..*,^struts\..*,^session\..*,^request\..*,^application\..*,^servlet(Request|Response)\..*,^parameters\..*,^action:.*,^method:.*</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+
+
+
+		<global-results>
+			<result name="login" type="redirect">index.jsp</result>
+			<result name="IllegalAccess" type="redirect">index.jsp</result>
+			<result name="pagenotfound" type="redirect">PageNotFound.jsp</result>
+		</global-results>
+		
+		
+		<action name="/event/{eventId}" class="action.EventAction" method="openEventPage">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+	        <result>../Event.jsp</result>
+	    </action>  
+		<action name="/{id}" class="action.ProfileAction" method="openProfile">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">/profile.jsp</result>
+		</action>
+		
+		<action name="sendPromoMails" class="action.MailAction" method="sendPromoMails">
+			<result name="success">welcome.jsp</result>
+		</action>
+		
+		
+		<action name="index" class="action.IndexAction" method="setIndexPageAction">
+			<result name="success">welcome.jsp</result>
+		</action>
+
+		<action name="Login" class="action.LoginAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="failure">index.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openProfile</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+		</action>
+		<action name="logout" class="action.LoginAction" method="logout">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">index.jsp</result>
+		</action>
+		
+		
+
+		<action name="deleteAccount" class="action.SettingsAction" method="deleteAccountAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">logout</param>
+			</result>
+		</action>
+		
+		
+		<action name="advanceSearch" class="action.SearchAction" method="advanceSearch">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">SearchResults.jsp</result>
+			<result name="noresults">SearchResults.jsp</result>
+		</action>
+		
+		<action name="createNewPassword" class="action.VerificationAction" method="createNewPassword">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">index.jsp</result>
+			<result name="failure">index.jsp</result>
+		</action>
+		<action name="verifyNGO" class="action.VerificationAction" method="verifyNGO">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">index.jsp</result>
+			<result name="failure">index.jsp</result>
+		</action>
+		<action name="verifyVolunteer" class="action.VerificationAction" method="verifyVolunteer">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<result name="failure">index.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openEventPage</param>
+				<param name="eventId">${eventId}</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+		</action>
+		<action name="resendVerificationMail" class="action.VerificationAction" method="resendVerificationMail">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">index.jsp</result>
+			<result name="failure">index.jsp</result>
+		</action>
+		
+		<action name="Register" class="action.RegistrationAction" method="register">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<interceptor-ref name="token"></interceptor-ref>
+			<result name="racs">index.jsp</result>
+			<result name="racf">index.jsp</result>
+			<result name="raus" type="redirectAction">
+				<param name="actionName">openProfile</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+			<result name="rauf">index.jsp</result>
+			<result name="rauc" type="redirectAction">
+				<param name="actionName">home</param>
+			</result>
+			<result name="input">registration.jsp</result>
+			<result name="invalid.token">invalid_token.jsp</result>
+		</action>
+		<action name="editProfile" class="action.RegistrationAction"
+			method="editProfile">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">registration.jsp</result>
+		</action>
+		<action name="SignUp" class="action.RegistrationAction" method="execute">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">registration.jsp</result>
+		</action>
+
+
+		<action name="home" class="action.ProfileAction" method="home">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openProfile</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+			<result name="failure">index.jsp</result>
+		</action>
+		
+		<action name="openProfile" class="action.ProfileAction" method="openProfile">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">profile.jsp</result>
+			<result name="failure">index.jsp</result>
+		</action>
+
+<!-- Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event Event -->
+
+		<action name="openNewEventForm" class="action.EventAction" method="openNewEventForm">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">NewEvent.jsp</result>
+		</action>
+		<action name="createNewEvent" class="action.EventAction" method="createNewEvent">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<interceptor-ref name="token"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openEventPage</param>
+				<param name="eventId">${eventId}</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+			<result name="input">NewEvent.jsp</result>
+			<result name="invalid.token">invalid_token.jsp</result>
+		</action>
+		
+		<action name="openEventPage" class="action.EventAction" method="openEventPage">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<interceptor-ref name="store">
+				<param name="operationMode">RETRIEVE</param>
+			</interceptor-ref>
+			<result name="success">Event.jsp</result>
+		</action>
+		
+		<action name="getListOfEvents" class="action.EventAction"
+			method="getListOfEvents">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">EventList.jsp</result>
+		</action>
+		
+		<action name="openEditEventPage" class="action.EventAction" method="openEditEventPage">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">NewEvent.jsp</result>
+		</action>
+		<action name="updateEventChanges" class="action.EventAction" method="updateEventChanges">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<interceptor-ref name="token"></interceptor-ref>
+			<result name="input">NewEvent.jsp</result>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openEventPage</param>
+				<param name="eventId">${eventId}</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+			<result name="invalid.token">invalid_token.jsp</result>
+		</action>
+		
+		<action name="deleteEvent" class="action.EventAction" method="deleteEventAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openProfile</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+		</action>
+
+
+<!-- Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Photos Ph -->
+
+		<action name="getPhotos" class="action.PhotosAction" method="openPhotosPage">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">photos.jsp</result>
+		</action>
+		<action name="getAllWCPhotos" class="action.PhotosAction" method="openPhotosPage">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">WCPhotos.jsp</result>
+		</action>
+		<action name="getEventPhotos" class="action.PhotosAction"
+			method="listEventPhotosAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">photos.jsp</result>
+		</action>
+
+		<action name="uploadPhotosAction" class="action.PhotosAction"
+			method="uploadPhotosAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<interceptor-ref name="fileUpload">
+				<param name="maximumSize">3145728</param>
+			</interceptor-ref>
+			<interceptor-ref name="params">
+				<param name="excludeParams">dojo\..*,^struts\..*</param>
+			</interceptor-ref>
+			<interceptor-ref name="validation">
+				<param name="excludeMethods">input,back,cancel,browse</param>
+			</interceptor-ref>
+			<interceptor-ref name="workflow">
+				<param name="excludeMethods">input,back,cancel,browse</param>
+			</interceptor-ref>
+			<result name="success">photos.jsp</result>
+		</action>
+
+
+		<action name="openAboutUs" class="action.AboutUsAction" method="openAboutUs">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">aboutUs.jsp</result>
+		</action>
+		<action name="editAboutUs" class="action.AboutUsAction" method="editAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">editAboutUs.jsp</result>
+		</action>
+
+
+		<action name="openContactUs" class="action.ContactUsAction"
+			method="openContactUs">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result name="success">contactUs.jsp</result>
+		</action>
+
+
+		<action name="openSettings" class="action.SettingsAction"
+			method="openSettings">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<interceptor-ref name="store">
+				<param name="operationMode">RETRIEVE</param>
+			</interceptor-ref>
+			<result name="success">settings.jsp</result>
+		</action>
+		<action name="updateNgoLogo" class="action.SettingsAction"
+			method="updateNgoLogo">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">home</param>
+			</result>
+		</action>
+		<action name="updatePassword" class="action.SettingsAction"
+			method="updatePassword">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">logout</param>
+			</result>
+			<result name="input" type="redirectAction">
+				<param name="actionName">openSettings</param>
+			</result>
+		</action>
+		<action name="saveVolunteerInfo" class="action.VolunteerAction"
+			method="saveVolunteerInfo">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<interceptor-ref name="store">
+				<param name="operationMode">STORE</param>
+			</interceptor-ref>
+			<result name="success" type="redirectAction">
+				<param name="actionName">openEventPage</param>
+				<param name="eventId">${eventId}</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+			<result name="failure" type="redirectAction">
+				<param name="actionName">openEventPage</param>
+				<param name="eventId">${eventId}</param>
+				<param name="pageOwnerCode">${pageOwnerCode}</param>
+			</result>
+		</action>
+		<action name="showApplications" class="action.ApplicationAction"
+			method="showApplications">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">Applications.jsp</result>
+		</action>
+		<action name="acceptApplication" class="action.ApplicationAction"
+			method="accept">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">Applications.jsp</result>
+		</action>
+		<action name="rejectApplication" class="action.ApplicationAction"
+			method="reject">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result name="success">Applications.jsp</result>
+		</action>
+
+
+
+
+
+	</package>
+	<package name="default" extends="json-default">
+		<interceptors>
+			<interceptor name="guestAuthentication" class="interceptors.GuestAuthInterceptor"></interceptor>
+			<interceptor-stack name="guestAuthStack">
+				<interceptor-ref name="guestAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+			<interceptor name="ownerAuthentication" class="interceptors.OwnerAuthInterceptor"></interceptor>
+			<interceptor-stack name="ownerAuthStack">
+				<interceptor-ref name="ownerAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+			<interceptor name="visitorAuthentication" class="interceptors.VisitorAuthInterceptor"></interceptor>
+			<interceptor-stack name="visitorAuthStack">
+				<interceptor-ref name="visitorAuthentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+
+		<global-results>
+			<result name="login" type="redirect">index.jsp</result>
+		</global-results>
+		<action name="ajaxStateChangeAction" class="action.RegistrationAction"
+			method="ajaxStateChangeAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxStateChangeSearchAction" class="action.SearchAction"
+			method="ajaxStateChangeSearchAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxCityChangeAction" class="action.RegistrationAction"
+			method="ajaxCityChangeAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxPincodeChangeAction" class="action.RegistrationAction"
+			method="ajaxPincodeChangeAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		<action name="ajaxFillInAction" class="action.RegistrationAction"
+			method="ajaxFillInAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxGetAutoGenNgoNames" class="action.RegistrationAction"
+			method="ajaxGetAutoGenNgoNames">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		
+		
+		
+		
+		<action name="ajaxAppreciateAction" class="action.ProfileAction"
+			method="ajaxAppreciateAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		
+		
+		<action name="ajaxDeletePhotoAction" class="action.PhotosAction"
+			method="ajaxDeletePhotoAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxGetPhotos" class="action.PhotosAction" method="listPhotosAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxAddToSlideshowAction" class="action.PhotosAction"
+			method="ajaxAddToSlideshowAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxRemoveFromSlideshowAction" class="action.PhotosAction"
+			method="ajaxRemoveFromSlideshowAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+	
+		
+		
+		<action name="ajaxDeleteAddressAction" class="action.SettingsAction"
+			method="ajaxDeleteAddressAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxAddNewAddressAction" class="action.SettingsAction"
+			method="ajaxAddNewAddressAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		<action name="ajaxDeleteCauseAction" class="action.SettingsAction"
+			method="ajaxDeleteCauseAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxAddNewCauseAction" class="action.SettingsAction"
+			method="ajaxAddNewCauseAction">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+
+
+
+		<action name="aliasNameValidationAction" class="action.RegistrationAction"
+			method="aliasNameValidationAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+			<result name="failure" type="httpheader">
+				<param name="status">404</param>
+				<param name="error">404</param>
+			</result>
+		</action>
+		<action name="emailValidationAction" class="action.RegistrationAction"
+			method="emailValidationAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+			<result name="failure" type="httpheader">
+				<param name="status">404</param>
+				<param name="error">404</param>
+			</result>
+		</action>
+		<action name="ajaxSaveNewAboutUs" class="action.AboutUsAction"
+			method="ajaxSaveNewAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxDeleteThisAboutUs" class="action.AboutUsAction"
+			method="ajaxDeleteThisAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxUpdateThisAboutUs" class="action.AboutUsAction"
+			method="ajaxUpdateThisAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxPinThisAboutUs" class="action.AboutUsAction"
+			method="ajaxPinThisAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxRemovePinThisAboutUs" class="action.AboutUsAction"
+			method="ajaxRemovePinThisAboutUs">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxGetAboutUsList" class="action.ProfileAction"
+			method="ajaxGetAboutUsList">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		
+		<action name="ajaxCreateNewWork" class="action.EventAction"
+			method="ajaxCreateNewWork">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="ajaxPromoteEvent" class="action.EventAction"
+			method="ajaxPromoteEvent">
+			<interceptor-ref name="ownerAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="volunteerEmailValidationAction" class="action.VolunteerAction"
+			method="volunteerEmailValidationAction">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+			<result name="failure" type="httpheader">
+				<param name="status">404</param>
+				<param name="error">404</param>
+			</result>
+		</action>
+		
+		<action name="sendOTP" class="action.VerificationAction" method="sendOTP">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="heartbeat" class="action.HeartbeatAction"
+			method="beat">
+			
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+		
+		
+		<!-- .......... Index Ajax actions ....................-->
+		<action name="indexGetCausesList" class="action.IndexAction"
+			method="indexGetCausesList">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		<action name="indexGetCityNGOList" class="action.IndexAction"
+			method="indexGetCityNGOList">
+			<interceptor-ref name="guestAuthStack"></interceptor-ref>
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="noCache">true</param>
+			</result>
+		</action>
+		
+	</package>
+	
+	
+	
+</struts>
