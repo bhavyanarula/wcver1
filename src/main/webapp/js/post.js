@@ -15,7 +15,7 @@ function createNewAboutUs(){
 			   iqwerty.toast.Toast(jsonResponse.ajaxResponseDummyMsg);
 			   document.getElementById("newAboutUsHeading").value = "";
 			   document.getElementById("newAboutUsContent").value = "";
-			   createNewAboutUsDiv(jsonResponse, 'prepended', true);
+			   createNewAboutUsDiv(jsonResponse.aboutUsBean, 'prepended', true);
 			},
 		failure : function(jsonResponse) {
         	   loader.stop();

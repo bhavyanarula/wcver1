@@ -155,6 +155,7 @@ public class AboutUsAction implements SessionAware {
 				setNewAboutUsCode(result);
 				newAboutUsPhoto = saveImgFile(conn, ""+result);
 				ajaxResponseDummyMsg = "Successfully Added!";
+				aboutUsBean = new AboutUsBean(result, ""+sessionMap.get("userCode"), newAboutUsHeading, newAboutUsContent, newAboutUsPhoto, createdOn, false);
 				return ResultConstants.SUCCESS;
 			}
 			else 
