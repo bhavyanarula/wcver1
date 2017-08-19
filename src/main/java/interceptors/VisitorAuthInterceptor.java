@@ -17,14 +17,13 @@ public class VisitorAuthInterceptor  extends AbstractInterceptor {
         		System.out.println("Visitor Auth called");
         		final ActionContext context = invocation.getInvocationContext();
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                Map<String, Parameter> params = (Map<String, Parameter>)context.get(ActionContext.PARAMETERS);
-                Map<String, Object> parametersCopy = new HashMap<String, Object>();
-                parametersCopy.putAll(params);
+                Map params = ActionContext.getContext().getParameters();
+                
                 String userCode = (String)sessionMap.get("userCode");
                 String pageOwnerCode = "";
                 String result = "";
                 if(params.get("pageOwnerCode")!=null)
-                	pageOwnerCode = (String) params.get("pageOwnerCode").getValue();
+                	pageOwnerCode = (String) params.get("pageOwnerCode");
                 if(pageOwnerCode.equals(userCode) || userCode==null || "".equals(userCode) || pageOwnerCode==null || "".equals(pageOwnerCode))
                 	return "IllegalAccess";
                 else{
@@ -33,7 +32,6 @@ public class VisitorAuthInterceptor  extends AbstractInterceptor {
 					sessionMap.put("visitor", true);
                 	result = invocation.invoke();
                 }
-                context.put(ActionContext.PARAMETERS, parametersCopy);
                 return result;
         }
 		public String getPageOwnerCode() {

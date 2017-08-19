@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.struts2.dispatcher.Parameter;
-import org.apache.struts2.dispatcher.Parameter.Request;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -20,11 +20,11 @@ public class OwnerAuthInterceptor  extends AbstractInterceptor {
         		System.out.println("Owner Auth called");
         		final ActionContext context = invocation.getInvocationContext();
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                Map<String, Parameter> params = (Map<String, Parameter>)context.get(ActionContext.PARAMETERS);
+                Map<String, Parameter> params = invocation.getInvocationContext().getParameters();
                 String role = "";
                 String result = "";
-                Map<String, Object> parametersCopy = new HashMap<String, Object>();
-                parametersCopy.putAll(params);
+                
+
                 if(!sessionMap.isEmpty()){
                 	String userCode = (String)sessionMap.get("userCode");
                 	if(userCode==null || "".equals(userCode))
@@ -39,14 +39,13 @@ public class OwnerAuthInterceptor  extends AbstractInterceptor {
                     			sessionMap.put("pageOwnerBean", sessionBean);
                     			sessionMap.put("isUserModified", false);
                     		}
-                    		 parametersCopy.put("pageOwnerCode", userCode);
+                    		// parametersCopy.put("pageOwnerCode", userCode);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
                     	result = invocation.invoke();
                     }
-                	context.put(ActionContext.PARAMETERS, parametersCopy);
                 }
                 else
                 	return "IllegalAccess";

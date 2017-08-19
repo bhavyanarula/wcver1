@@ -20,13 +20,12 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
         		System.out.println("Guest Auth called");
         		final ActionContext context = invocation.getInvocationContext();
                 Map<String, Object> sessionMap = invocation.getInvocationContext().getSession();
-                Map<String, Parameter> params = (Map<String, Parameter>)context.get(ActionContext.PARAMETERS);
-                Map<String, Object> parametersCopy = new HashMap<String, Object>();
-                parametersCopy.putAll(params);
+                Map<String, Parameter> params = ActionContext.getContext().getParameters();
+                
                 String pageOwnerCode = "";
                 try(Connection conn = DBConnection.getConnection()) {
                 	String userCode = (String)sessionMap.get("userCode");
-                	if(params.get("pageOwnerCode")==null)
+                	if(params.get("pageOwnerCode").getValue()==null)
                 	{
                 		if(!sessionMap.containsKey("pageOwnerCode"))
                     	{
@@ -75,7 +74,7 @@ public class GuestAuthInterceptor  extends AbstractInterceptor {
 						sessionMap.put("owner", true);
 						sessionMap.put("visitor", false);
 					}
-					context.put(ActionContext.PARAMETERS, parametersCopy);
+					//context.put(ActionContext.PARAMETERS, parametersCopy);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					System.out.println(e.getMessage());
