@@ -20,7 +20,7 @@ public class AboutUsBean implements Comparable<AboutUsBean>{
 		this.content = content;
 		this.createdOn = createdOn;
 		this.setPinned(isPinned);
-		this.setPhoto(photo);
+		this.setPhoto(photo); 
 	}
 	public AboutUsBean() {
 		// TODO Auto-generated constructor stub
