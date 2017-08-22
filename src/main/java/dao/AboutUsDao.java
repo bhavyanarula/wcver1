@@ -23,7 +23,8 @@ public class AboutUsDao {
 				+ "p_file_name, p_file_path, p_file_extension, p_category"
 				+ " from about_us_table "
 				+ "join photo_table on p_owner_id = au_code "
-				+ "where au_ngo_uid_fk=? and p_category = 'AU' order by au_is_pinned desc, au_created_on desc limit "+start+","+count);
+				//+ "where au_ngo_uid_fk=? and p_category = 'AU' order by au_is_pinned desc, au_created_on desc limit "+start+","+count);
+				+ "where au_ngo_uid_fk=? and p_category = 'AU' order by au_code limit "+start+","+count);
 		stmt.setString(1, ngoEmail);
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
@@ -34,6 +35,7 @@ public class AboutUsDao {
 					rs.getString("au_heading"),content, 
 					rs.getString("p_file_path")+rs.getString("p_file_name")+"_thumb"+rs.getString("p_file_extension"), 
 					createdOn, rs.getBoolean("au_is_pinned")));
+					//TODO
 		}
 		stmt.close();
 		return aboutUsList;
