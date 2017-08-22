@@ -1,8 +1,9 @@
 package beans;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
-public class AboutUsBean {
+public class AboutUsBean implements Comparable<AboutUsBean>{
 
 	private int code;
 	private String ngoUid;
@@ -65,5 +66,21 @@ public class AboutUsBean {
 	}
 	public void setPinned(boolean isPinned) {
 		this.pinned = isPinned;
+	}
+	public static final Comparator<AboutUsBean> DEFAULT_SORT = new Comparator<AboutUsBean>(){
+        @Override
+        public int compare(AboutUsBean o1, AboutUsBean o2) {
+        	if(o1.isPinned() && o2.createdOn.before(System.currentTimeMillis()))
+        		return 1;
+        	if(o1.isPinned() && !o2.createdOn.before(System.currentTimeMillis()))
+        		return 0;
+        	if(o1.createdOn.after(o2.createdOn))
+        		return 1;
+        	return 0;
+        }
+    };
+	@Override
+	public int compareTo(AboutUsBean o) {
+		return 0;
 	}
 }

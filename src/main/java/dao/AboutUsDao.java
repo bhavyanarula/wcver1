@@ -35,7 +35,7 @@ public class AboutUsDao {
 					rs.getString("au_heading"),content, 
 					rs.getString("p_file_path")+rs.getString("p_file_name")+"_thumb"+rs.getString("p_file_extension"), 
 					createdOn, rs.getBoolean("au_is_pinned")));
-					//TODO
+			aboutUsList.sort(AboutUsBean.DEFAULT_SORT);
 		}
 		stmt.close();
 		return aboutUsList;
