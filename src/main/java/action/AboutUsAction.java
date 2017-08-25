@@ -27,7 +27,6 @@ public class AboutUsAction implements SessionAware {
 	
 	private List<AboutUsBean> aboutUsList = new ArrayList<AboutUsBean>();
 	private AboutUsBean aboutUsBean = new AboutUsBean();
-	//change from test;
 	private String newAboutUsHeading;
 	private String newAboutUsContent;
 	private int newAboutUsCode;
