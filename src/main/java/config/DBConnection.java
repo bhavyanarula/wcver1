@@ -21,12 +21,12 @@ public class DBConnection {
 		
 		
         //p.setUrl("jdbc:mysql://localhost:3306/welfarecommunity");
-		p.setUrl("jdbc:mysql://127.12.232.130:3306/wcver1");
+		p.setUrl("jdbc:mysql://mysql:3306/wcver1");
         
         //p.setUsername("root");
-		p.setUsername("adminhhXciE3");
+		p.setUsername("userR0L");
         //p.setPassword("root");
-		p.setPassword("6iusYwpKeQte");
+		p.setPassword("3phUsMcYiM0N2OFM");
 		
 		p.setDriverClassName("com.mysql.jdbc.Driver");
         
