@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>Welfare</groupId>
-	<artifactId>wcver1</artifactId>
+	<artifactId>wcprod</artifactId>
 	<packaging>war</packaging>
 	<version>1.0</version>
-	<name>wcver1</name>
+	<name>wcprod</name>
 	<repositories>
 		<repository>
 			<id>eap</id>
@@ -193,28 +193,26 @@
 	</dependencies>
 	<profiles>
 		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when 
-				invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app 
-				will need. -->
-			<!-- By default that is to put the resulting archive into the 'webapps' 
-				folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
-			<id>openshift</id>
-			<build>
-				<finalName>wcver1</finalName>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>webapps</outputDirectory>
-							<warName>ROOT</warName>
-							
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+     <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
+     <!-- Use this profile for any OpenShift specific customization your app will need. -->
+     <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+     <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+     <id>openshift</id>
+     <build>
+        <finalName>wcprod</finalName>
+        <plugins>
+          <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <outputDirectory>target</outputDirectory>
+              		  <warName>ROOT</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+      </build>
+    </profile>
 	</profiles>
 </project>
