@@ -24,9 +24,9 @@ import util.ResultConstants;
 public class AboutUsAction implements SessionAware {
 
 	private SessionMap<String, Object> sessionMap;
+	
 	private List<AboutUsBean> aboutUsList = new ArrayList<AboutUsBean>();
 	private AboutUsBean aboutUsBean = new AboutUsBean();
-	
 	private String newAboutUsHeading;
 	private String newAboutUsContent;
 	private int newAboutUsCode;
