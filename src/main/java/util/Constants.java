@@ -5,7 +5,7 @@ public class Constants {
 	public static final String ROOTURL = "https://welfarecommunity.org/";
 	//public static final String ROOTPATH = "D:/Workspaces/welfarecommunity/WelfareCommunity/WebContent";
 	//public static final String ROOTPATH = System.getenv("OPENSHIFT_DATA_DIR");
-	public static final String ROOTPATH = "/home/jboss/data/";
+	public static final String ROOTPATH = "/data/";
 	public static final String IMAGES_ROOTPATH = ROOTPATH+"/images";
 	public static final String DB_IMAGES_ROOTPATH = "uploads/images";
 	
