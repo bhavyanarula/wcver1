@@ -64,8 +64,8 @@ public class Uploads extends HttpServlet {
     	
 	    //File file = new File("D:/Workspaces/welfarecommunity/" + filePath);
 	
-	    System.out.println("file to be expected === "+System.getenv("OPENSHIFT_DATA_DIR") + filePath.replace("/uploads/",""));
-	    File file = new File(System.getenv("OPENSHIFT_DATA_DIR") + filePath.replace("/uploads/",""));
+	    System.out.println("file to be expected === "+Constants.ROOTPATH  + filePath.replace("/uploads/",""));
+	    File file = new File(Constants.ROOTPATH + filePath.replace("/uploads/",""));
 	    InputStream input = new FileInputStream(file);
  
 	    response.setContentLength((int) file.length());
