@@ -68,6 +68,13 @@
 	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.7";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));</script>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-1947886091160201",
+    enable_page_level_ads: true
+  });
+</script>
 </head>
 <body id="home">
 
